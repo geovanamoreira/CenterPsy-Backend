@@ -1,0 +1,6 @@
+@CenterPsy_Backend_HostAddress = http://localhost:5122
+
+GET {{CenterPsy_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

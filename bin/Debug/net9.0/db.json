@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "nome": "Admin",
+      "tipo": "Administrador",
+      "email": "admin@gmail.com",
+      "senha": "admin124#!"
+    },
+    {
+      "nome": "Maria Silva",
+      "email": "mariaW@email.com",
+      "senha": "123456",
+      "tipo": "Usuario",
+      "id": 2
+    }
+  ]
+}
