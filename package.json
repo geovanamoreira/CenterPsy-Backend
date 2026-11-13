@@ -1,0 +1,10 @@
+{
+  "name": "centerpsy-backend-data-server",
+  "private": true,
+  "scripts": {
+    "start:db": "json-server --watch db.json --port 3000"
+  },
+  "devDependencies": {
+    "json-server": "0.17.4"
+  }
+}

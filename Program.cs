@@ -9,6 +9,11 @@ builder.Services.AddHttpClient<UsuarioService>(cliente =>
     cliente.BaseAddress = new Uri("http://localhost:3000/");
 });
 
+builder.Services.AddHttpClient<ContatoService>(cliente =>
+{
+    cliente.BaseAddress = new Uri("http://localhost:3000/");
+});
+
 builder.Services.AddScoped<LoginService>();
 
 builder.Services.AddCors(options =>
