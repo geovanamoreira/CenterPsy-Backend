@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CenterPsy_Backend.Services;
+using CenterPsy_Backend.Security;
+using System.ComponentModel.DataAnnotations;
 
 namespace CenterPsy_Backend.Controllers
 {
@@ -8,10 +10,14 @@ namespace CenterPsy_Backend.Controllers
     public class LoginController : ControllerBase
     {
         private readonly LoginService _service;
+        private readonly JwtTokenService _jwtTokenService;
 
-        public LoginController(LoginService service)
+        public LoginController(
+            LoginService service,
+            JwtTokenService jwtTokenService)
         {
             _service = service;
+            _jwtTokenService = jwtTokenService;
         }
 
         [HttpPost]
@@ -25,19 +31,29 @@ namespace CenterPsy_Backend.Controllers
             if (usuario == null)
                 return Unauthorized("E-mail ou senha incorretos.");
 
+            var token = _jwtTokenService.GerarToken(usuario);
+
             return Ok(new
             {
-                usuario.Id,
-                usuario.Nome,
-                usuario.Email,
-                usuario.Tipo
+                token,
+                usuario = new
+                {
+                    usuario.Id,
+                    usuario.Nome,
+                    usuario.Email,
+                    usuario.Tipo
+                }
             });
         }
     }
 
     public class LoginRequest
     {
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = "";
+
+        [Required]
         public string Senha { get; set; } = "";
     }
 }
