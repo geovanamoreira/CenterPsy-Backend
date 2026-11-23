@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\CenterPsy-Backend.props" />
-</Project>

@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using CenterPsy_Backend.Models;
 
 namespace CenterPsy_Backend.Services
@@ -55,6 +55,16 @@ namespace CenterPsy_Backend.Services
                 return false;
 
             var resposta = await _http.DeleteAsync($"users/{id}");
+
+            return resposta.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> AtualizarSenha(int id, string senhaHash)
+        {
+            var resposta = await _http.PatchAsJsonAsync(
+                $"users/{id}",
+                new { senha = senhaHash }
+            );
 
             return resposta.IsSuccessStatusCode;
         }
