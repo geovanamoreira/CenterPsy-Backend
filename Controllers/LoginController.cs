@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using CenterPsy_Backend.Services;
 using CenterPsy_Backend.Security;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,7 @@ namespace CenterPsy_Backend.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginRequest dados)
         {
             var usuario = await _service.Login(

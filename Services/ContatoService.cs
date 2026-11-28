@@ -59,6 +59,20 @@ public class ContatoService
         return true;
     }
 
+    public async Task<bool> AtualizarStatus(int id, string status)
+    {
+        var resposta = await _http.PatchAsJsonAsync(
+            $"contatos/{id}",
+            new { status }
+        );
+
+        if (resposta.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return false;
+
+        resposta.EnsureSuccessStatusCode();
+        return true;
+    }
+
     public async Task<bool> Excluir(int id)
     {
         var resposta = await _http.DeleteAsync($"contatos/{id}");

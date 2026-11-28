@@ -1,4 +1,5 @@
 ﻿using CenterPsy_Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -83,6 +84,13 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.AddPolicy("AcessoAdministrativo", policy =>
+        policy.RequireRole("Administrador"));
+
     options.AddPolicy("AcessoPsicologa", policy =>
         policy.RequireRole("Psicologa"));
 });

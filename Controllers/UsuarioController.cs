@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using CenterPsy_Backend.Models;
 using CenterPsy_Backend.Services;
 
@@ -6,6 +7,7 @@ namespace CenterPsy_Backend.Controllers
 {
     [ApiController]
     [Route("api/users")]
+    [Authorize(Policy = "AcessoAdministrativo")]
     public class UsuarioController : ControllerBase
     {
         private readonly UsuarioService _service;
@@ -18,7 +20,8 @@ namespace CenterPsy_Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            return Ok(await _service.Listar());
+            var usuarios = await _service.Listar();
+            return Ok(usuarios.Select(ProjetarUsuario));
         }
 
         [HttpGet("{id}")]
@@ -29,15 +32,23 @@ namespace CenterPsy_Backend.Controllers
             if (usuario == null)
                 return NotFound();
 
-            return Ok(usuario);
+            return Ok(ProjetarUsuario(usuario));
         }
 
         [HttpPost]
         public async Task<IActionResult> Cadastrar(Usuario usuario)
         {
+            var senha = usuario.Senha;
+            if (string.IsNullOrWhiteSpace(senha) || senha.Length < 8 || senha.Length > 128)
+                return BadRequest(new { erro = "A senha deve ter entre 8 e 128 caracteres." });
+
             var novoUsuario = await _service.Cadastrar(usuario);
 
-            return Ok(novoUsuario);
+            return CreatedAtAction(
+                nameof(Buscar),
+                new { id = novoUsuario.Id },
+                ProjetarUsuario(novoUsuario)
+            );
         }
 
         [HttpPut("{id}")]
@@ -61,5 +72,13 @@ namespace CenterPsy_Backend.Controllers
 
             return NoContent();
         }
+
+        private static object ProjetarUsuario(Usuario usuario) => new
+        {
+            usuario.Id,
+            usuario.Nome,
+            usuario.Email,
+            usuario.Tipo
+        };
     }
 }
